@@ -98,7 +98,7 @@ torch_nn_functional_softmax = torch.nn.functional.softmax
 SDPA_HAS_GQA = "enable_gqa" in scaled_dot_product_attention.__doc__
 
 # Fix new HF's inference code
-def _fast_prepare_inputs_for_generation(self, input_ids, **kwargs,):
+def _fast_prepare_inputs_for_generation(self, input_ids, attention_mask=None, **kwargs,):
     past_key_values = kwargs.get("past_key_values", None)
     if past_key_values is not None:
         # Check for uninitialized DynamicCache
@@ -137,7 +137,7 @@ def _fast_prepare_inputs_for_generation(self, input_ids, **kwargs,):
 
     if "cache_position" in kwargs:
         kwargs["position_ids"] = kwargs["cache_position"]
-    return { "input_ids" : input_ids, **kwargs, }
+    return { "input_ids" : input_ids, "attention_mask": attention_mask, **kwargs, }
 pass
 
 
